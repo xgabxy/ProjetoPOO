@@ -1,0 +1,109 @@
+[18/04 20:21] JULIANA VALENCA
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.List;
+public class CadastroCarros extends JFrame {
+    private JTextField nomeField, marcaField, valorField, tipoField, temposervicoField;
+    private JButton cadastrarButton, listarButton;
+    private JTextArea outputArea;
+    private List<Servico> servicos;
+    public CadastroCarros() {
+        servicos = new ArrayList<>();
+        nomeField = new JTextField(20);
+        marcaField = new JTextField(20);
+        valorField = new JTextField(20);
+        tipoField = new JTextField(20);
+        temposervicoField = new JTextField(20);
+
+        cadastrarButton = new JButton("Cadastrar");
+        listarButton = new JButton("Listar");
+        outputArea = new JTextArea(10, 40);
+        outputArea.setEditable(false);
+        JPanel inputPanel = new JPanel(new GridLayout(5, 2));
+        inputPanel.add(new JLabel("Nome:"));
+        inputPanel.add(nomeField);
+        inputPanel.add(new JLabel("Marca:"));
+        inputPanel.add(marcaField);
+        inputPanel.add(new JLabel("Valor:"));
+        inputPanel.add(valorField);
+        inputPanel.add(new JLabel("Tipo:"));
+        inputPanel.add(tipoField);
+        inputPanel.add(new JLabel("Tempo de Servico:"));
+        inputPanel.add(temposervicoField);
+        inputPanel.add(cadastrarButton);
+        inputPanel.add(listarButton);
+        JPanel outputPanel = new JPanel();
+        outputPanel.add(new JLabel("Cadastro de Servicos e Produtos:"));
+        outputPanel.add(new JScrollPane(outputArea));
+        add(inputPanel, BorderLayout.NORTH);
+        add(outputPanel, BorderLayout.CENTER);
+        cadastrarButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                cadastrarCarro();
+            }
+        });
+        listarButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                listarServico();
+            }
+        });
+        setTitle("Cadastro de Servicos e Produtos");
+        pack();
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+    private void cadastrarCarro() {
+        String nome = nomeField.getText();
+        String marca = marcaField.getText();
+        String valor = valorField.getText();
+        String tipo = tipoField.getText();
+        String temposervico = temposervicoField.getText();
+
+        Servico servico = new Servico(nome, marca, valor, tipo, temposervico);
+        Servico.add(servico);
+        outputArea.append(servico.toString() + "\n");
+        // Limpar campos após o cadastro
+        nomeField.setText("");
+        marcaField.setText("");
+        valorField.setText("");
+        tipoField.setText("");
+        temposervicoField.setText("");
+    }
+    private void listarServico() {
+        outputArea.setText("");
+        for (Servico servico : servico) {
+            outputArea.append(servico.toString() + "\n");
+        }
+    }
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                new CadastroCarros();
+            }
+        });
+    }
+}
+class Servico {
+    private String nome;
+    private String marca;
+    private String valor;
+    private String tipo;
+    private String temposervico;
+
+
+    public Servico(String nome, String marca,String valor, String tipo, String temposervico) {
+        this.nome = nome;
+        this.marca = marca;
+        this.valor = valor;
+        this.tipo = tipo;
+        this.tipo = temposervico;
+
+    }
+    @Override
+    public String toString() {
+        return "Nome: " + nome + ", Marca: " + marca + ", Valor: " + valor + ", Tipo: " + tipo + ",  Tempo de Servico: " + temposervico;
+    }
+}
