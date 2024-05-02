@@ -1,0 +1,99 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.List;
+public class CadastroCarros extends JFrame {
+    private JTextField nomeField, enderecoField, telefoneField, emailField;
+    private JButton cadastrarButton, listarButton;
+    private JTextArea outputArea;
+    private List<Cliente> clientes;
+    public CadastroCarros() {
+        clientes = new ArrayList<>();
+        nomeField = new JTextField(20);
+        enderecoField = new JTextField(20);
+        telefoneField = new JTextField(20);
+        emailField = new JTextField(20);
+        cadastrarButton = new JButton("Cadastrar");
+        listarButton = new JButton("Listar");
+        outputArea = new JTextArea(10, 40);
+        outputArea.setEditable(false);
+        JPanel inputPanel = new JPanel(new GridLayout(5, 2));
+        inputPanel.add(new JLabel("Nome completo:"));
+        inputPanel.add(nomeField);
+        inputPanel.add(new JLabel("Endereço:"));
+        inputPanel.add(enderecoField);
+        inputPanel.add(new JLabel("Telefone:"));
+        inputPanel.add(telefoneField);
+        inputPanel.add(new JLabel("E-mail:"));
+        inputPanel.add(emailField);
+        inputPanel.add(cadastrarButton);
+        inputPanel.add(listarButton);
+        JPanel outputPanel = new JPanel();
+        outputPanel.add(new JLabel("Clientes cadastrados:"));
+        outputPanel.add(new JScrollPane(outputArea));
+        add(inputPanel, BorderLayout.NORTH);
+        add(outputPanel, BorderLayout.CENTER);
+        cadastrarButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                cadastrarCarro();
+            }
+        });
+        listarButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                listarCliente();
+            }
+        });
+        setTitle("Cadastro de Cliente");
+        pack();
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+    private void cadastrarCarro() {
+        String nome = nomeField.getText();
+        String endereco = enderecoField.getText();
+        String telefone = telefoneField.getText();
+        String email = emailField.getText();
+
+        Cliente cliente = new Cliente(nome, endereco, telefone, email);
+        clientes.add(cliente);
+        outputArea.append(cliente.toString() + "\n");
+        // Limpar campos após o cadastro
+        nomeField.setText("");
+        enderecoField.setText("");
+        telefoneField.setText("");
+        emailField.setText("");
+    }
+    private void listarCliente() {
+        outputArea.setText("");
+        for (Cliente cliente : clientes) {
+            outputArea.append(cliente.toString() + "\n");
+        }
+    }
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                new CadastroCarros();
+            }
+        });
+    }
+}
+class Cliente {
+    private String nome;
+    private String endereco;
+    private String telefone;
+    private String email;
+
+    public Cliente(String nome, String endereco,String telefone, String email) {
+        this.nome = nome;
+        this.endereco = endereco;
+        this.telefone = telefone;
+        this.email = email;
+
+    }
+    @Override
+    public String toString() {
+        return "Nome completo: " + nome + ", Endereço: " + endereco + ", Telefone: " + telefone + ", E-mail: " + email;
+    }
+}
