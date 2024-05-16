@@ -1,0 +1,119 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.List;
+
+class CadastroProdutos {
+    public static class CadastroProduto extends JFrame {
+        private JTextField nomeField, marcaField, precoField, categoriaField, garantiaField;
+        private JButton cadastrarButton, listarButton;
+        private JTextArea outputArea;
+        private List<Produto> produtos;
+
+        public CadastroProduto() {
+            produtos = new ArrayList<>();
+            nomeField = new JTextField(20);
+            marcaField = new JTextField(20);
+            precoField = new JTextField(20);
+            categoriaField = new JTextField(20);
+            garantiaField = new JTextField(20);
+
+            cadastrarButton = new JButton("Cadastrar");
+            listarButton = new JButton("Listar");
+            outputArea = new JTextArea(10, 40);
+            outputArea.setEditable(false);
+
+            JPanel inputPanel = new JPanel(new GridLayout(5, 2));
+            inputPanel.add(new JLabel("Nome:"));
+            inputPanel.add(nomeField);
+            inputPanel.add(new JLabel("Marca:"));
+            inputPanel.add(marcaField);
+            inputPanel.add(new JLabel("Preço:"));
+            inputPanel.add(precoField);
+            inputPanel.add(new JLabel("Categoria:"));
+            inputPanel.add(categoriaField);
+            inputPanel.add(new JLabel("Garantia:"));
+            inputPanel.add(garantiaField);
+            inputPanel.add(cadastrarButton);
+            inputPanel.add(listarButton);
+
+            JPanel outputPanel = new JPanel();
+            outputPanel.add(new JLabel("Cadastro de Produtos de Informática:"));
+            outputPanel.add(new JScrollPane(outputArea));
+
+            add(inputPanel, BorderLayout.NORTH);
+            add(outputPanel, BorderLayout.CENTER);
+
+            cadastrarButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    cadastrarProduto();
+                }
+            });
+            listarButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    listarProdutos();
+                }
+            });
+
+            setTitle("Cadastro de Produtos de Informática");
+            pack();
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            setLocationRelativeTo(null);
+            setVisible(true);
+        }
+
+        private void cadastrarProduto() {
+            String nome = nomeField.getText();
+            String marca = marcaField.getText();
+            String preco = precoField.getText();
+            String categoria = categoriaField.getText();
+            String garantia = garantiaField.getText();
+
+            Produto produto = new Produto(nome, marca, preco, categoria, garantia);
+            boolean add = produtos.add(produto);
+            outputArea.append(produto.toString() + "\n");
+
+            // Limpar campos após o cadastro
+            nomeField.setText("");
+            marcaField.setText("");
+            precoField.setText("");
+            categoriaField.setText("");
+            garantiaField.setText("");
+        }
+
+        private void listarProdutos() {
+            outputArea.setText("");
+            for (Produto produto : produtos) {
+                outputArea.append(produto.toString() + "\n");
+            }
+        }
+
+        public static void main(String[] args) {
+            SwingUtilities.invokeLater(() -> {
+                new CadastroProduto();
+            });
+        }
+    }
+}
+
+public class Produto {
+    private String nome;
+    private String marca;
+    private String preco;
+    private String categoria;
+    private String garantia;
+
+    public Produto(String nome, String marca, String preco, String categoria, String garantia) {
+        this.nome = nome;
+        this.marca = marca;
+        this.preco = preco;
+        this.categoria = categoria;
+        this.garantia = garantia;
+    }
+
+    @Override
+    public String toString() {
+        return "Nome: " + nome + ", Marca: " + marca + ", Preço: " + preco + ", Categoria: " + categoria + ", Garantia: " + garantia;
+    }
+}
