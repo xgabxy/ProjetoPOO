@@ -1,0 +1,106 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.List;
+
+
+class CadastroServicos {
+    public static class CadastroServico extends JFrame {
+        private JTextField nomeField, descricaoField, precoField;
+        private JButton cadastrarButton, listarButton;
+        private JTextArea outputArea;
+        private List<Servico> servicos;
+
+        public CadastroServico() {
+            servicos = new ArrayList<>();
+            nomeField = new JTextField(20);
+            descricaoField = new JTextField(20);
+            precoField = new JTextField(20);
+
+            cadastrarButton = new JButton("Cadastrar");
+            listarButton = new JButton("Listar");
+            outputArea = new JTextArea(10, 40);
+            outputArea.setEditable(false);
+
+            JPanel inputPanel = new JPanel(new GridLayout(4, 2));
+            inputPanel.add(new JLabel("Nome:"));
+            inputPanel.add(nomeField);
+            inputPanel.add(new JLabel("Serviço:"));
+            inputPanel.add(descricaoField);
+            inputPanel.add(new JLabel("Preço:"));
+            inputPanel.add(precoField);
+            inputPanel.add(cadastrarButton);
+            inputPanel.add(listarButton);
+
+            JPanel outputPanel = new JPanel();
+            outputPanel.add(new JLabel("Cadastro de Serviços de Informática:"));
+            outputPanel.add(new JScrollPane(outputArea));
+
+            add(inputPanel, BorderLayout.NORTH);
+            add(outputPanel, BorderLayout.CENTER);
+
+            cadastrarButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    cadastrarServico();
+                }
+            });
+            listarButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    listarServicos();
+                }
+            });
+
+            setTitle("Cadastro de Serviços de Informática");
+            pack();
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            setLocationRelativeTo(null);
+            setVisible(true);
+        }
+
+        private void cadastrarServico() {
+            String nome = nomeField.getText();
+            String descricao = descricaoField.getText();
+            String preco = precoField.getText();
+
+            Servico servico = new Servico(nome, descricao, preco);
+            servicos.add(servico);
+            outputArea.append(servico.toString() + "\n");
+
+            // Limpar campos após o cadastro
+            nomeField.setText("");
+            descricaoField.setText("");
+            precoField.setText("");
+        }
+
+        private void listarServicos() {
+            outputArea.setText("");
+            for (Servico servico : servicos) {
+                outputArea.append(servico.toString() + "\n");
+            }
+        }
+
+        public static void main(String[] args) {
+            SwingUtilities.invokeLater(() -> {
+                new CadastroServico();
+            });
+        }
+    }
+}
+
+class Servico {
+    private String nome;
+    private String descricao;
+    private String preco;
+
+    public Servico(String nome, String descricao, String preco) {
+        this.nome = nome;
+        this.descricao = descricao;
+        this.preco = preco;
+    }
+
+    @Override
+    public String toString() {
+        return "Nome: " + nome + ", Descrição: " + descricao + ", Preço: " + preco;
+    }
+}
